@@ -67,18 +67,6 @@
             box-shadow: 0 1px 3px 0 #680909;
             transform: translateY(0);
         }
-        .music-toggle {
-            background: linear-gradient(145deg, #757575, #424242);
-            font-size: clamp(0.9em, 2.5vw, 1em);
-            padding: 10px 20px;
-            max-width: 220px;
-            margin: 12px auto;
-            box-shadow: 0 4px 12px 0 #212121;
-        }
-        .music-toggle.playing {
-            background: linear-gradient(145deg, #4caf50, #2e7d32);
-            box-shadow: 0 4px 12px 0 #1b5e20;
-        }
         .field {
             margin: 20px 0;
         }
@@ -163,17 +151,19 @@
             position: fixed;
             bottom: 20px;
             right: 20px;
-            background: rgba(0,0,0,0.8);
-            padding: 10px 15px;
+            background: rgba(0,0,0,0.9);
+            padding: 12px 18px;
             border-radius: 50px;
-            border: 2px solid #e28300;
+            border: 3px solid #e28300;
             cursor: pointer;
-            font-size: 1.5em;
+            font-size: 1.8em;
             z-index: 1000;
-            transition: transform 0.2s;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
         #audioControl:hover {
-            transform: scale(1.1);
+            transform: scale(1.15);
+            border-color: #e53939;
         }
         @media (max-width: 480px) {
             body {
@@ -185,6 +175,8 @@
             #audioControl {
                 bottom: 10px;
                 right: 10px;
+                padding: 10px 15px;
+                font-size: 1.5em;
             }
         }
     </style>
@@ -265,11 +257,13 @@
         <div id="score"></div>
     </div>
 
-    <!-- Bouton de contrôle audio flottant -->
-    <div id="audioControl" onclick="toggleAudio()">🔇</div>
+    <!-- Bouton de contrôle audio flottant visible -->
+    <div id="audioControl" onclick="toggleAudio()" title="Cliquez pour activer/désactiver la musique">🔇</div>
 
-    <audio id="bgMusic" loop>
+    <!-- Élément audio avec ton fichier -->
+    <audio id="bgMusic" loop preload="auto">
       <source src="https://silverteacher.github.io/escape/audio1.mp3" type="audio/mpeg">
+      Votre navigateur ne supporte pas l'élément audio.
     </audio>
 
     <script>
@@ -277,22 +271,24 @@
         let time = 15*60, interval, finished = false, startAt = 15*60;
         let hintsUsed = [];
         let audioPlaying = false;
-        let audioElement = document.getElementById('bgMusic');
-        let audioBtn = document.getElementById('audioControl');
 
         // Fonction pour activer/désactiver l'audio
         function toggleAudio() {
+            const audio = document.getElementById('bgMusic');
+            const btn = document.getElementById('audioControl');
+            
             if (audioPlaying) {
-                audioElement.pause();
-                audioBtn.textContent = '🔇';
+                audio.pause();
+                btn.textContent = '🔇';
                 audioPlaying = false;
             } else {
-                audioElement.volume = 0.3;
-                audioElement.play().then(() => {
-                    audioBtn.textContent = '🔊';
+                audio.volume = 0.3;
+                audio.play().then(() => {
+                    btn.textContent = '🔊';
                     audioPlaying = true;
                 }).catch(error => {
                     console.error('Erreur audio:', error);
+                    alert('Impossible de lire l\'audio. Vérifiez votre connexion ou le fichier audio.');
                 });
             }
         }
@@ -300,14 +296,15 @@
         function startTimer() {
             if (interval) return;
             
-            // Active l'audio au premier clic (geste utilisateur)
+            // Active l'audio automatiquement au démarrage
+            const audio = document.getElementById('bgMusic');
             if (!audioPlaying) {
-                audioElement.volume = 0.3;
-                audioElement.play().then(() => {
-                    audioBtn.textContent = '🔊';
+                audio.volume = 0.3;
+                audio.play().then(() => {
+                    document.getElementById('audioControl').textContent = '🔊';
                     audioPlaying = true;
                 }).catch(error => {
-                    console.log('Audio bloqué, utilisez le bouton en bas à droite');
+                    console.log('Audio bloqué - utilisez le bouton 🔇 en bas à droite');
                 });
             }
             
