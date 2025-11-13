@@ -159,6 +159,22 @@
             font-size: clamp(0.9em, 2.5vw, 1em);
             display: none;
         }
+        #audioControl {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.8);
+            padding: 10px 15px;
+            border-radius: 50px;
+            border: 2px solid #e28300;
+            cursor: pointer;
+            font-size: 1.5em;
+            z-index: 1000;
+            transition: transform 0.2s;
+        }
+        #audioControl:hover {
+            transform: scale(1.1);
+        }
         @media (max-width: 480px) {
             body {
                 padding: 8px;
@@ -166,16 +182,16 @@
             .container {
                 padding: 16px;
             }
+            #audioControl {
+                bottom: 10px;
+                right: 10px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Mission 1 : Gare centrale</h1>
-        
-        <button class="btn music-toggle" id="musicBtn" onclick="toggleMusic()">
-            🔇 Musique : NON
-        </button>
 
         <div class="instructions">
             <p><strong>Vous avez été recrutés pour vos qualités de travail en groupe.</strong></p>
@@ -249,7 +265,10 @@
         <div id="score"></div>
     </div>
 
-    <audio id="myAudio" loop preload="auto" crossorigin="anonymous">
+    <!-- Bouton de contrôle audio flottant -->
+    <div id="audioControl" onclick="toggleAudio()">🔇</div>
+
+    <audio id="bgMusic" loop>
       <source src="https://silverteacher.github.io/escape/audio1.mp3" type="audio/mpeg">
     </audio>
 
@@ -257,36 +276,39 @@
         const codes = {1:"52347", 2:"23740", 3:"53480", 4:"13654", 5:"32213"};
         let time = 15*60, interval, finished = false, startAt = 15*60;
         let hintsUsed = [];
+        let audioPlaying = false;
+        let audioElement = document.getElementById('bgMusic');
+        let audioBtn = document.getElementById('audioControl');
 
-        function toggleMusic() {
-            var myAudio = document.getElementById("myAudio");
-            var btn = document.getElementById("musicBtn");
-            
-            if (myAudio.paused) {
-                myAudio.volume = 0.3;
-                myAudio.play().then(() => {
-                    btn.innerHTML = "🔊 Musique : OUI";
-                    btn.classList.add("playing");
-                    console.log("Musique lancée avec succès");
-                }).catch(err => {
-                    console.error("Erreur lecture audio:", err);
-                    alert("Erreur de lecture audio. Essayez de cliquer à nouveau.");
-                });
+        // Fonction pour activer/désactiver l'audio
+        function toggleAudio() {
+            if (audioPlaying) {
+                audioElement.pause();
+                audioBtn.textContent = '🔇';
+                audioPlaying = false;
             } else {
-                myAudio.pause();
-                btn.innerHTML = "🔇 Musique : NON";
-                btn.classList.remove("playing");
-                console.log("Musique mise en pause");
+                audioElement.volume = 0.3;
+                audioElement.play().then(() => {
+                    audioBtn.textContent = '🔊';
+                    audioPlaying = true;
+                }).catch(error => {
+                    console.error('Erreur audio:', error);
+                });
             }
         }
 
         function startTimer() {
             if (interval) return;
             
-            // Lance automatiquement la musique si pas encore jouée
-            var myAudio = document.getElementById("myAudio");
-            if (myAudio.paused) {
-                toggleMusic();
+            // Active l'audio au premier clic (geste utilisateur)
+            if (!audioPlaying) {
+                audioElement.volume = 0.3;
+                audioElement.play().then(() => {
+                    audioBtn.textContent = '🔊';
+                    audioPlaying = true;
+                }).catch(error => {
+                    console.log('Audio bloqué, utilisez le bouton en bas à droite');
+                });
             }
             
             document.getElementById('startBtn').style.display = "none";
