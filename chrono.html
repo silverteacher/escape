@@ -263,42 +263,62 @@
         const codes = {1:"52347", 2:"23740", 3:"53480", 4:"13654", 5:"32213"};
         let time = 15*60, interval, finished = false, startAt = 15*60;
         let hintsUsed = [];
+        let isPlaying = false;
         
-        // Créer l'élément audio dynamiquement
-        let audio = new Audio('https://silverteacher.github.io/escape/audio1.mp3');
+        // Charger l'audio immédiatement au chargement de la page
+        const audio = document.createElement('audio');
+        audio.src = 'https://silverteacher.github.io/escape/audio1.mp3';
         audio.loop = true;
         audio.volume = 0.3;
-        let audioPlaying = false;
+        audio.load(); // Force le chargement
+        
+        // Ajouter événement pour vérifier le chargement
+        audio.addEventListener('loadeddata', function() {
+            console.log('Audio chargé et prêt');
+        });
+        
+        audio.addEventListener('error', function(e) {
+            console.error('Erreur chargement audio:', e);
+            document.getElementById('audioControl').textContent = '❌';
+        });
 
         function toggleAudio() {
             const btn = document.getElementById('audioControl');
             
-            if (audioPlaying) {
+            if (isPlaying) {
                 audio.pause();
                 btn.textContent = '🔇';
-                audioPlaying = false;
+                isPlaying = false;
             } else {
-                audio.play().then(() => {
-                    btn.textContent = '🔊';
-                    audioPlaying = true;
-                }).catch(err => {
-                    console.error('Erreur:', err);
-                    btn.textContent = '❌';
-                });
+                const playPromise = audio.play();
+                
+                if (playPromise !== undefined) {
+                    playPromise.then(function() {
+                        btn.textContent = '🔊';
+                        isPlaying = true;
+                        console.log('Lecture audio réussie');
+                    }).catch(function(error) {
+                        console.error('Erreur de lecture:', error.name, error.message);
+                        alert('Cliquez à nouveau sur l\'icône pour activer le son');
+                    });
+                }
             }
         }
 
         function startTimer() {
             if (interval) return;
             
-            // Tente de lancer l'audio
-            if (!audioPlaying) {
-                audio.play().then(() => {
-                    document.getElementById('audioControl').textContent = '🔊';
-                    audioPlaying = true;
-                }).catch(err => {
-                    console.log('Cliquez sur l\'icône 🔇 pour activer la musique');
-                });
+            // Active automatiquement l'audio au clic du bouton
+            if (!isPlaying) {
+                const playPromise = audio.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(function() {
+                        document.getElementById('audioControl').textContent = '🔊';
+                        isPlaying = true;
+                    }).catch(function(error) {
+                        console.log('Audio non autorisé, cliquez sur l\'icône 🔇');
+                    });
+                }
             }
             
             document.getElementById('startBtn').style.display = "none";
