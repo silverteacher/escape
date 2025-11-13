@@ -210,7 +210,7 @@
                 <button class="btn" onclick="checkPhase(1)">✓ Valider Phase 1</button>
                 <div class="hint-section">
                     <button class="hint-btn" onclick="useHint(1)" id="hint1btn">💡 Coup de pouce Phase 1</button>
-                    <div id="hint1" class="hint-content">👉 Allez voir l'équipe <strong>La Flex Bataille</strong> (jeu de cartes), regardez leur plan de travail.</div>
+                    <div id="hint1" class="hint-content">👉 Allez voir une des équipes qui ont des écouteurs. Ne soyez pas trop timide :)</div>
                 </div>
             </div>
 
@@ -220,7 +220,7 @@
                 <button class="btn" onclick="checkPhase(2)">✓ Valider Phase 2</button>
                 <div class="hint-section">
                     <button class="hint-btn" onclick="useHint(2)" id="hint2btn">💡 Coup de pouce Phase 2</button>
-                    <div id="hint2" class="hint-content">👉 Allez jeter un coup d'œil sur les murs.</div>
+                    <div id="hint2" class="hint-content">👉 Allez jeter un coup d'œil sur les murs. Il doit y avoir un indice.</div>
                 </div>
             </div>
 
@@ -230,7 +230,7 @@
                 <button class="btn" onclick="checkPhase(3)">✓ Valider Phase 3</button>
                 <div class="hint-section">
                     <button class="hint-btn" onclick="useHint(3)" id="hint3btn">💡 Coup de pouce Phase 3</button>
-                    <div id="hint3" class="hint-content">👉 Trouvez les poufs !</div>
+                    <div id="hint3" class="hint-content">👉 Faites bouger les poufs, même si quelqu'un est assis dessus :)</div>
                 </div>
             </div>
 
@@ -240,7 +240,7 @@
                 <button class="btn" onclick="checkPhase(4)">✓ Valider Phase 4</button>
                 <div class="hint-section">
                     <button class="hint-btn" onclick="useHint(4)" id="hint4btn">💡 Coup de pouce Phase 4</button>
-                    <div id="hint4" class="hint-content">👉 Tournez le <strong>Tétra'Aide</strong> pour demander de l'aide sur le rouge.</div>
+                    <div id="hint4" class="hint-content">👉 Tournez le Tétra'Aide pour demander de l'aide sur le rouge et je viendrai vous aider.</div>
                 </div>
             </div>
 
@@ -250,7 +250,7 @@
                 <button class="btn" onclick="checkPhase(5)">✓ Valider Phase 5</button>
                 <div class="hint-section">
                     <button class="hint-btn" onclick="useHint(5)" id="hint5btn">💡 Coup de pouce Phase 5</button>
-                    <div id="hint5" class="hint-content">👉 Allez voir une des équipes qui a des écouteurs.</div>
+                    <div id="hint5" class="hint-content">👉 Allez voir l'autre équipe qui a des écouteurs et parlez-leur, ne soyez pas timide !</div>
                 </div>
             </div>
         </div>
@@ -259,28 +259,40 @@
 
     <div id="audioControl" onclick="toggleAudio()">🔇</div>
 
+    <audio id="bgMusic" loop>
+        <source src="https://dane.site.ac-lille.fr/wp-content/uploads/sites/8/2025/11/Virus-Creatif.mp3" type="audio/mpeg">
+    </audio>
+
     <script>
         const codes = {1:"52347", 2:"23740", 3:"53480", 4:"13654", 5:"32213"};
         let time = 15*60, interval, finished = false, startAt = 15*60;
         let hintsUsed = [];
         let isPlaying = false;
+        let audio = document.getElementById('bgMusic');
         
-        // Charger l'audio immédiatement au chargement de la page
-        const audio = document.createElement('audio');
-        audio.src = 'https://silverteacher.github.io/escape/audio1.mp3';
-        audio.loop = true;
-        audio.volume = 0.3;
-        audio.load(); // Force le chargement
+        // Créer un contexte audio pour le son d'erreur
+        let audioContext;
         
-        // Ajouter événement pour vérifier le chargement
-        audio.addEventListener('loadeddata', function() {
-            console.log('Audio chargé et prêt');
-        });
-        
-        audio.addEventListener('error', function(e) {
-            console.error('Erreur chargement audio:', e);
-            document.getElementById('audioControl').textContent = '❌';
-        });
+        function createErrorSound() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = 200;
+            oscillator.type = 'sawtooth';
+            
+            gainNode.gain.setValueAtTime(0.15, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.3);
+        }
 
         function toggleAudio() {
             const btn = document.getElementById('audioControl');
@@ -290,35 +302,28 @@
                 btn.textContent = '🔇';
                 isPlaying = false;
             } else {
-                const playPromise = audio.play();
-                
-                if (playPromise !== undefined) {
-                    playPromise.then(function() {
-                        btn.textContent = '🔊';
-                        isPlaying = true;
-                        console.log('Lecture audio réussie');
-                    }).catch(function(error) {
-                        console.error('Erreur de lecture:', error.name, error.message);
-                        alert('Cliquez à nouveau sur l\'icône pour activer le son');
-                    });
-                }
+                audio.volume = 0.3;
+                audio.play().then(() => {
+                    btn.textContent = '🔊';
+                    isPlaying = true;
+                }).catch(err => {
+                    console.error('Erreur audio:', err);
+                });
             }
         }
 
         function startTimer() {
             if (interval) return;
             
-            // Active automatiquement l'audio au clic du bouton
+            // Lance la musique automatiquement
             if (!isPlaying) {
-                const playPromise = audio.play();
-                if (playPromise !== undefined) {
-                    playPromise.then(function() {
-                        document.getElementById('audioControl').textContent = '🔊';
-                        isPlaying = true;
-                    }).catch(function(error) {
-                        console.log('Audio non autorisé, cliquez sur l\'icône 🔇');
-                    });
-                }
+                audio.volume = 0.3;
+                audio.play().then(() => {
+                    document.getElementById('audioControl').textContent = '🔊';
+                    isPlaying = true;
+                }).catch(err => {
+                    console.log('Cliquez sur l\'icône pour activer la musique');
+                });
             }
             
             document.getElementById('startBtn').style.display = "none";
@@ -348,7 +353,17 @@
         function checkPhase(n) {
             let user = document.getElementById('team').value.trim();
             if (!user) return alert("Renseignez d'abord le nom de l'équipe !");
-            let code = document.getElementById('p'+n).value;
+            
+            let code = document.getElementById('p'+n).value.trim();
+            
+            // Si le champ est vide, jouer le son et retirer 5 secondes
+            if (code === '') {
+                createErrorSound();
+                time = Math.max(0, time - 5);
+                alert("⚠️ Code vide ! Vous perdez 5 secondes !");
+                return;
+            }
+            
             if (code === codes[n]) {
                 document.getElementById('p'+n).disabled = true;
                 document.getElementById('p'+n).style.background = "#4caf50";
@@ -360,6 +375,9 @@
                     showScore();
                 }
             } else {
+                // Mauvais code : son désagréable et perte de 5 secondes
+                createErrorSound();
+                time = Math.max(0, time - 5);
                 document.getElementById('p'+n).style.background = "#c62828";
                 document.getElementById('p'+n).style.color = "#fff";
                 setTimeout(()=>{
@@ -393,3 +411,14 @@
     </script>
 </body>
 </html>
+```
+
+**Corrections effectuées** :
+
+✅ **Nouveaux indices** dans le bon ordre (1 à 5)
+✅ **Nouvelle URL musicale** : dane.site.ac-lille.fr (sans CORS)
+✅ **Son désagréable** : Générateur de son synthétique quand code vide ou faux
+✅ **Pénalité -5 secondes** : À chaque validation incorrecte
+✅ **Icône audio** conservée et fonctionnelle
+
+La musique devrait maintenant fonctionner avec ton URL académique ! 🎵
