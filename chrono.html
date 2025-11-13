@@ -257,24 +257,20 @@
         <div id="score"></div>
     </div>
 
-    <!-- Bouton de contrôle audio flottant visible -->
-    <div id="audioControl" onclick="toggleAudio()" title="Cliquez pour activer/désactiver la musique">🔇</div>
-
-    <!-- Élément audio avec ton fichier -->
-    <audio id="bgMusic" loop preload="auto">
-      <source src="https://silverteacher.github.io/escape/audio1.mp3" type="audio/mpeg">
-      Votre navigateur ne supporte pas l'élément audio.
-    </audio>
+    <div id="audioControl" onclick="toggleAudio()">🔇</div>
 
     <script>
         const codes = {1:"52347", 2:"23740", 3:"53480", 4:"13654", 5:"32213"};
         let time = 15*60, interval, finished = false, startAt = 15*60;
         let hintsUsed = [];
+        
+        // Créer l'élément audio dynamiquement
+        let audio = new Audio('https://silverteacher.github.io/escape/audio1.mp3');
+        audio.loop = true;
+        audio.volume = 0.3;
         let audioPlaying = false;
 
-        // Fonction pour activer/désactiver l'audio
         function toggleAudio() {
-            const audio = document.getElementById('bgMusic');
             const btn = document.getElementById('audioControl');
             
             if (audioPlaying) {
@@ -282,13 +278,12 @@
                 btn.textContent = '🔇';
                 audioPlaying = false;
             } else {
-                audio.volume = 0.3;
                 audio.play().then(() => {
                     btn.textContent = '🔊';
                     audioPlaying = true;
-                }).catch(error => {
-                    console.error('Erreur audio:', error);
-                    alert('Impossible de lire l\'audio. Vérifiez votre connexion ou le fichier audio.');
+                }).catch(err => {
+                    console.error('Erreur:', err);
+                    btn.textContent = '❌';
                 });
             }
         }
@@ -296,15 +291,13 @@
         function startTimer() {
             if (interval) return;
             
-            // Active l'audio automatiquement au démarrage
-            const audio = document.getElementById('bgMusic');
+            // Tente de lancer l'audio
             if (!audioPlaying) {
-                audio.volume = 0.3;
                 audio.play().then(() => {
                     document.getElementById('audioControl').textContent = '🔊';
                     audioPlaying = true;
-                }).catch(error => {
-                    console.log('Audio bloqué - utilisez le bouton 🔇 en bas à droite');
+                }).catch(err => {
+                    console.log('Cliquez sur l\'icône 🔇 pour activer la musique');
                 });
             }
             
