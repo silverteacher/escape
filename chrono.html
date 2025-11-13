@@ -249,8 +249,8 @@
         <div id="score"></div>
     </div>
 
-    <audio id="myAudio" loop preload="auto">
-      <source src="audio1.mp3" type="audio/mpeg">
+    <audio id="myAudio" loop preload="auto" crossorigin="anonymous">
+      <source src="https://silverteacher.github.io/escape/audio1.mp3" type="audio/mpeg">
     </audio>
 
     <script>
@@ -264,13 +264,19 @@
             
             if (myAudio.paused) {
                 myAudio.volume = 0.3;
-                myAudio.play();
-                btn.innerHTML = "🔊 Musique : OUI";
-                btn.classList.add("playing");
+                myAudio.play().then(() => {
+                    btn.innerHTML = "🔊 Musique : OUI";
+                    btn.classList.add("playing");
+                    console.log("Musique lancée avec succès");
+                }).catch(err => {
+                    console.error("Erreur lecture audio:", err);
+                    alert("Erreur de lecture audio. Essayez de cliquer à nouveau.");
+                });
             } else {
                 myAudio.pause();
                 btn.innerHTML = "🔇 Musique : NON";
                 btn.classList.remove("playing");
+                console.log("Musique mise en pause");
             }
         }
 
