@@ -17,6 +17,7 @@
             text-shadow: 2px 2px 8px #000;
             margin: 0;
             padding: 16px;
+            padding-bottom: 100px;
         }
         .container {
             max-width: 520px;
@@ -149,7 +150,7 @@
         }
         #audioControl {
             position: fixed;
-            bottom: 20px;
+            bottom: 80px;
             right: 20px;
             background: rgba(0,0,0,0.9);
             padding: 12px 18px;
@@ -165,18 +166,52 @@
             transform: scale(1.15);
             border-color: #e53939;
         }
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.95);
+            padding: clamp(8px, 2vw, 12px);
+            text-align: center;
+            font-size: clamp(0.75em, 2vw, 0.85em);
+            border-top: 2px solid #e28300;
+            z-index: 999;
+        }
+        .footer a {
+            color: #e28300;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .footer a:hover {
+            color: #e53939;
+            text-decoration: underline;
+        }
+        .footer-divider {
+            margin: 0 8px;
+            color: #666;
+        }
         @media (max-width: 480px) {
             body {
                 padding: 8px;
+                padding-bottom: 120px;
             }
             .container {
                 padding: 16px;
             }
             #audioControl {
-                bottom: 10px;
+                bottom: 100px;
                 right: 10px;
                 padding: 10px 15px;
                 font-size: 1.5em;
+            }
+            .footer {
+                padding: 12px 8px;
+                font-size: 0.7em;
+            }
+            .footer-divider {
+                display: block;
+                margin: 4px 0;
             }
         }
     </style>
@@ -259,6 +294,12 @@
 
     <div id="audioControl" onclick="toggleAudio()">🔇</div>
 
+    <div class="footer">
+        Adapté de <a href="https://www.escape-team.fr" target="_blank">Escape Team</a>
+        <span class="footer-divider">|</span>
+        Application créée par <a href="mailto:amelie.silvert@ac-lille.fr">Amélie Silvert</a>
+    </div>
+
     <audio id="bgMusic" loop>
         <source src="https://dane.site.ac-lille.fr/wp-content/uploads/sites/8/2025/11/Virus-Creatif.mp3" type="audio/mpeg">
     </audio>
@@ -269,8 +310,6 @@
         let hintsUsed = [];
         let isPlaying = false;
         let audio = document.getElementById('bgMusic');
-        
-        // Créer un contexte audio pour le son d'erreur
         let audioContext;
         
         function createErrorSound() {
@@ -315,7 +354,6 @@
         function startTimer() {
             if (interval) return;
             
-            // Lance la musique automatiquement
             if (!isPlaying) {
                 audio.volume = 0.3;
                 audio.play().then(() => {
@@ -356,7 +394,6 @@
             
             let code = document.getElementById('p'+n).value.trim();
             
-            // Si le champ est vide, jouer le son et retirer 5 secondes
             if (code === '') {
                 createErrorSound();
                 time = Math.max(0, time - 5);
@@ -375,7 +412,6 @@
                     showScore();
                 }
             } else {
-                // Mauvais code : son désagréable et perte de 5 secondes
                 createErrorSound();
                 time = Math.max(0, time - 5);
                 document.getElementById('p'+n).style.background = "#c62828";
@@ -413,12 +449,13 @@
 </html>
 ```
 
-**Corrections effectuées** :
+Voilà ! Le code HTML complet avec toutes les fonctionnalités :
+- Timer 15 minutes
+- 5 phases avec codes
+- Indices personnalisés
+- Musique avec contrôle
+- Son d'erreur + pénalité -5s
+- Footer avec crédits
+- 100% responsive
 
-✅ **Nouveaux indices** dans le bon ordre (1 à 5)
-✅ **Nouvelle URL musicale** : dane.site.ac-lille.fr (sans CORS)
-✅ **Son désagréable** : Générateur de son synthétique quand code vide ou faux
-✅ **Pénalité -5 secondes** : À chaque validation incorrecte
-✅ **Icône audio** conservée et fonctionnelle
-
-La musique devrait maintenant fonctionner avec ton URL académique ! 🎵
+Prêt à utiliser ! 🎮
