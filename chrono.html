@@ -9,16 +9,6 @@ text
         <p style="font-size:1.2em; margin-top:12px;">🔥 <strong>Bonne chance !</strong></p>
     </div>
 
-    <div class="team-hints">
-        <p><strong>🎵 Le groupe Beatles</strong> détient l'indice 1.</p>
-        <p>Tentez votre chance en anglais ? :)</p>
-    </div>
-
-    <div class="team-hints rolling-stones">
-        <p><strong>🎸 Le groupe Rolling Stones</strong> détient l'indice 2.</p>
-        <p>Vous tentez de chanter Satisfaction pour les amadouer ?</p>
-    </div>
-
     <div class="field">
         <label>Nom de l'équipe :</label>
         <input id="team" type="text" placeholder="Entrez le nom de votre équipe..." />
@@ -30,6 +20,10 @@ text
     <div id="phases" style="display:none">
         
         <div class="phase">
+            <div class="team-hints">
+                <p><strong>🎵 Le groupe Beatles</strong> détient l'indice 1.</p>
+                <p>Tentez votre chance en anglais ? :)</p>
+            </div>
             <label>Phase 1 :</label>
             <input type="text" id="p1" maxlength="5" placeholder="Code..."/>
             <button class="btn" onclick="checkPhase(1)">✓ Valider Phase 1</button>
@@ -40,6 +34,10 @@ text
         </div>
 
         <div class="phase" id="phase2" style="display:none">
+            <div class="team-hints rolling-stones">
+                <p><strong>🎸 Le groupe Rolling Stones</strong> détient l'indice 2.</p>
+                <p>Vous tentez de chanter Satisfaction pour les amadouer ?</p>
+            </div>
             <label>Phase 2 :</label>
             <input type="text" id="p2" maxlength="5" placeholder="Code..."/>
             <button class="btn" onclick="checkPhase(2)">✓ Valider Phase 2</button>
@@ -231,6 +229,3 @@ text
     }
 </script>
 </body> </html> 
-
-
-
