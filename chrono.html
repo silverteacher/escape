@@ -1,124 +1,376 @@
-<!DOCTYPE html> <html lang="fr"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>EscapeTeam - Gare centrale</title> <style> * { box-sizing: border-box; } body { background: url('https://images.unsplash.com/photo-1519681393784-d120267933ba?fit=crop&w=1200&q=80'); background-size: cover; background-position: center; color: #fff; font-family: 'Segoe UI', Arial, sans-serif; text-shadow: 2px 2px 8px #000; margin: 0; padding: 16px; } .container { max-width: 520px; width: 100%; margin: 24px auto; background: rgba(0,0,0,0.92); border-radius: 16px; padding: clamp(16px, 4vw, 32px); box-shadow: 0 0 18px 3px #e53939; } h1 { text-align: center; letter-spacing: 1px; text-transform: uppercase; font-size: clamp(1.3em, 5vw, 1.8em); margin-top: 0; } .instructions { background: rgba(255,255,255,0.05); border-left: 4px solid #e28300; padding: 16px; margin: 20px 0; font-size: clamp(0.9em, 2.5vw, 1em); line-height: 1.6; } .team-hints { background: rgba(74, 144, 226, 0.15); border: 2px solid #4A90E2; border-radius: 8px; padding: 14px; margin: 16px 0; font-size: clamp(0.88em, 2.5vw, 0.95em); } .team-hints strong { color: #4A90E2; } .rolling-stones { background: rgba(210, 105, 30, 0.15); border-color: #D2691E; } .rolling-stones strong { color: #D2691E; } .btn { background: linear-gradient(145deg,#e53939 50%, #e28300 100%); border: none; color: #fff; font-size: clamp(1em, 3vw, 1.2em); padding: clamp(12px, 3vw, 16px) clamp(20px, 4vw, 28px); margin: 18px auto; display: block; width: 100%; max-width: 300px; border-radius: 12px; box-shadow: 0 6px 24px 0 #a41111, 0 1.5px 8px 2px #e28300; cursor: pointer; transition: all 0.2s; font-weight: bold; } .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px 2px #a41111; } .btn:active { background: #b01515; box-shadow: 0 1px 3px 0 #680909; transform: translateY(0); } .field { margin: 20px 0; } .field label { display: block; margin-bottom: 8px; font-size: clamp(1em, 2.8vw, 1.1em); } .field input { width: 100%; padding: 12px; font-size: 1em; border-radius: 6px; border: 2px solid #555; background: rgba(255,255,255,0.9); } #timer { font-size: clamp(1.8em, 6vw, 2.4em); text-align: center; margin: 18px 0; color: #ff5; font-weight: bold; } .phase { margin-bottom: 20px; background: rgba(255,255,255,0.03); padding: 16px; border-radius: 8px; } .phase input { width: 100%; padding: 12px; font-size: 1.1em; border-radius: 6px; border: 2px solid #666; margin-top: 8px; text-align: center; font-weight: bold; } #score { font-size: clamp(1.5em, 5vw, 2em); text-align: center; margin-top: 22px; color: #4caf50; } .hint-section { margin: 16px 0; padding: 12px; background: rgba(255,152,0,0.1); border-radius: 8px; text-align: center; } .hint-btn { background: linear-gradient(145deg, #ff9800, #f57c00); font-size: clamp(0.85em, 2.5vw, 0.95em); padding: 10px 16px; margin: 8px auto; display: block; width: 90%; max-width: 280px; border: none; color: #fff; border-radius: 8px; box-shadow: 0 3px 12px 0 #c65100; cursor: pointer; font-weight: bold; } .hint-btn:disabled { opacity: 0.4; cursor: not-allowed; } .hint-content { background: rgba(255,152,0,0.2); border: 2px solid #ff9800; padding: 12px; margin: 12px 0; border-radius: 8px; font-size: clamp(0.9em, 2.5vw, 1em); display: none; } #audioControl { position: fixed; bottom: 20px; right: 20px; background: rgba(0,0,0,0.9); padding: 12px 18px; border-radius: 50px; border: 3px solid #e28300; cursor: pointer; font-size: 1.8em; z-index: 1000; transition: all 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.5); } #audioControl:hover { transform: scale(1.15); border-color: #e53939; } @media (max-width: 480px) { body { padding: 8px; } .container { padding: 16px; } #audioControl { bottom: 10px; right: 10px; padding: 10px 15px; font-size: 1.5em; } } </style> </head> <body> <div class="container"> <h1>Mission 1 : Gare centrale</h1>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EscapeTeam - Gare centrale</title>
+    <style>
+    * {
+        box-sizing: border-box;
+    }
 
-    <div class="instructions">
-        <p><strong>Vous avez été recrutés pour vos qualités de travail en groupe.</strong></p>
-        <p>Vous êtes en totale autonomie sur cet atelier. Prenez connaissance des documents et démarrez le timer.</p>
-        <p><strong>Vous devez saisir les codes dans l'ordre des missions.</strong></p>
-        <p>Vous avez le droit de vous déplacer dans la pièce et de solliciter vos collègues. Ils pourraient peut-être vous aider.</p>
-        <p style="color:#ff9800;">⚠️ Vous disposez d'un coup de pouce par phase, mais vous perdrez 10 secondes précieuses à chaque utilisation !</p>
-        <p style="font-size:1.2em; margin-top:12px;">🔥 <strong>Bonne chance !</strong></p>
+    body {
+        background: url('https://images.unsplash.com/photo-1519681393784-d120267933ba?fit=crop&w=1200&q=80');
+        background-size: cover;
+        background-position: center;
+        color: #fff;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        text-shadow: 2px 2px 8px #000;
+        margin: 0;
+        padding: 16px;
+    }
+
+    .container {
+        max-width: 520px;
+        width: 100%;
+        margin: 24px auto;
+        background: rgba(0, 0, 0, 0.92);
+        border-radius: 16px;
+        padding: clamp(16px, 4vw, 32px);
+        box-shadow: 0 0 18px 3px #e53939;
+    }
+
+    h1 {
+        text-align: center;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        font-size: clamp(1.3em, 5vw, 1.8em);
+        margin-top: 0;
+    }
+
+    .instructions {
+        background: rgba(255, 255, 255, 0.05);
+        border-left: 4px solid #e28300;
+        padding: 16px;
+        margin: 20px 0;
+        font-size: clamp(0.9em, 2.5vw, 1em);
+        line-height: 1.6;
+    }
+
+    .team-hints {
+        background: rgba(74, 144, 226, 0.15);
+        border: 2px solid #4A90E2;
+        border-radius: 8px;
+        padding: 14px;
+        margin: 16px 0;
+        font-size: clamp(0.88em, 2.5vw, 0.95em);
+    }
+
+    .team-hints strong {
+        color: #4A90E2;
+    }
+
+    .rolling-stones {
+        background: rgba(210, 105, 30, 0.15);
+        border-color: #D2691E;
+    }
+
+    .rolling-stones strong {
+        color: #D2691E;
+    }
+
+    .btn {
+        background: linear-gradient(145deg, #e53939 50%, #e28300 100%);
+        border: none;
+        color: #fff;
+        font-size: clamp(1em, 3vw, 1.2em);
+        padding: clamp(12px, 3vw, 16px) clamp(20px, 4vw, 28px);
+        margin: 18px auto;
+        display: block;
+        width: 100%;
+        max-width: 300px;
+        border-radius: 12px;
+        box-shadow: 0 6px 24px 0 #a41111, 0 1.5px 8px 2px #e28300;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-weight: bold;
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 28px 2px #a41111;
+    }
+
+    .btn:active {
+        background: #b01515;
+        box-shadow: 0 1px 3px 0 #680909;
+        transform: translateY(0);
+    }
+
+    .field {
+        margin: 20px 0;
+    }
+
+    .field label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: clamp(1em, 2.8vw, 1.1em);
+    }
+
+    .field input {
+        width: 100%;
+        padding: 12px;
+        font-size: 1em;
+        border-radius: 6px;
+        border: 2px solid #555;
+        background: rgba(255, 255, 255, 0.9);
+    }
+
+    #timer {
+        font-size: clamp(1.8em, 6vw, 2.4em);
+        text-align: center;
+        margin: 18px 0;
+        color: #ff5;
+        font-weight: bold;
+    }
+
+    .phase {
+        margin-bottom: 20px;
+        background: rgba(255, 255, 255, 0.03);
+        padding: 16px;
+        border-radius: 8px;
+    }
+
+    .phase input {
+        width: 100%;
+        padding: 12px;
+        font-size: 1.1em;
+        border-radius: 6px;
+        border: 2px solid #666;
+        margin-top: 8px;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    #score {
+        font-size: clamp(1.5em, 5vw, 2em);
+        text-align: center;
+        margin-top: 22px;
+        color: #4caf50;
+    }
+
+    .hint-section {
+        margin: 16px 0;
+        padding: 12px;
+        background: rgba(255, 152, 0, 0.1);
+        border-radius: 8px;
+        text-align: center;
+    }
+
+    .hint-btn {
+        background: linear-gradient(145deg, #ff9800, #f57c00);
+        font-size: clamp(0.85em, 2.5vw, 0.95em);
+        padding: 10px 16px;
+        margin: 8px auto;
+        display: block;
+        width: 90%;
+        max-width: 280px;
+        border: none;
+        color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 3px 12px 0 #c65100;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .hint-btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+
+    .hint-content {
+        background: rgba(255, 152, 0, 0.2);
+        border: 2px solid #ff9800;
+        padding: 12px;
+        margin: 12px 0;
+        border-radius: 8px;
+        font-size: clamp(0.9em, 2.5vw, 1em);
+        display: none;
+    }
+
+    #audioControl {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: rgba(0, 0, 0, 0.9);
+        padding: 12px 18px;
+        border-radius: 50px;
+        border: 3px solid #e28300;
+        cursor: pointer;
+        font-size: 1.8em;
+        z-index: 1000;
+        transition: all 0.3s;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    }
+
+    #audioControl:hover {
+        transform: scale(1.15);
+        border-color: #e53939;
+    }
+
+    @media (max-width: 480px) {
+        body {
+            padding: 8px;
+        }
+
+        .container {
+            padding: 16px;
+        }
+
+        #audioControl {
+            bottom: 10px;
+            right: 10px;
+            padding: 10px 15px;
+            font-size: 1.5em;
+        }
+    }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Mission 1 : Gare centrale</h1>
+
+        <div class="instructions">
+            <p>
+                <strong>Vous avez été recrutés pour vos qualités de travail en groupe.</strong>
+            </p>
+            <p>Vous êtes en totale autonomie sur cet atelier. Prenez connaissance des documents et démarrez le timer.</p>
+            <p>
+                <strong>Vous devez saisir les codes dans l'ordre des missions.</strong>
+            </p>
+            <p>Vous avez le droit de vous déplacer dans la pièce et de solliciter vos collègues. Ils pourraient peut-être vous aider.</p>
+            <p style="color:#ff9800;">⚠️ Vous disposez d'un coup de pouce par phase, mais vous perdrez 10 secondes précieuses à chaque utilisation !</p>
+            <p style="font-size:1.2em; margin-top:12px;">
+                🔥 
+                <strong>Bonne chance !</strong>
+            </p>
+        </div>
+
+        <div class="field">
+            <label>Nom de l'équipe :</label>
+            <input id="team" type="text" placeholder="Entrez le nom de votre équipe..."/>
+        </div>
+
+        <div id="timer">15:00</div>
+        <button class="btn" onclick="startTimer()" id="startBtn">🚀 Déclencher le chronomètre</button>
+
+        <div id="phases" style="display:none">
+
+            <div class="phase">
+                <div class="team-hints">
+                    <p>
+                        <strong>🎵 Le groupe Beatles</strong>
+                         détient l'indice 1.
+                    </p>
+                    <p>Tentez votre chance en anglais ? :)</p>
+                </div>
+                <label>Phase 1 :</label>
+                <input type="text" id="p1" maxlength="5" placeholder="Code..." onkeypress="if(event.key==='Enter') checkPhase(1)"/>
+                <button class="btn" onclick="checkPhase(1)">✓ Valider Phase 1</button>
+                <div class="hint-section">
+                    <button class="hint-btn" onclick="useHint(1)" id="hint1btn">💡 Coup de pouce Phase 1</button>
+                    <div id="hint1" class="hint-content">👉 Allez voir une des équipes qui ont des écouteurs. Ne soyez pas trop timide :)</div>
+                </div>
+            </div>
+
+            <div class="phase" id="phase2" style="display:none">
+                <div class="team-hints rolling-stones">
+                    <p>
+                        <strong>🎸 Le groupe Rolling Stones</strong>
+                         détient l'indice 2.
+                    </p>
+                    <p>Vous tentez de chanter Satisfaction pour les amadouer ?</p>
+                </div>
+                <label>Phase 2 :</label>
+                <input type="text" id="p2" maxlength="5" placeholder="Code..." onkeypress="if(event.key==='Enter') checkPhase(2)"/>
+                <button class="btn" onclick="checkPhase(2)">✓ Valider Phase 2</button>
+                <div class="hint-section">
+                    <button class="hint-btn" onclick="useHint(2)" id="hint2btn">💡 Coup de pouce Phase 2</button>
+                    <div id="hint2" class="hint-content">👉 Allez jeter un coup d'œil sur les murs. Il doit y avoir un indice.</div>
+                </div>
+            </div>
+
+            <div class="phase" id="phase3" style="display:none">
+                <label>Phase 3 :</label>
+                <input type="text" id="p3" maxlength="5" placeholder="Code..." onkeypress="if(event.key==='Enter') checkPhase(3)"/>
+                <button class="btn" onclick="checkPhase(3)">✓ Valider Phase 3</button>
+                <div class="hint-section">
+                    <button class="hint-btn" onclick="useHint(3)" id="hint3btn">💡 Coup de pouce Phase 3</button>
+                    <div id="hint3" class="hint-content">👉 Faites bouger les poufs, même si quelqu'un est assis dessus :)</div>
+                </div>
+            </div>
+
+            <div class="phase" id="phase4" style="display:none">
+                <label>Phase 4 :</label>
+                <input type="text" id="p4" maxlength="5" placeholder="Code..." onkeypress="if(event.key==='Enter') checkPhase(4)"/>
+                <button class="btn" onclick="checkPhase(4)">✓ Valider Phase 4</button>
+                <div class="hint-section">
+                    <button class="hint-btn" onclick="useHint(4)" id="hint4btn">💡 Coup de pouce Phase 4</button>
+                    <div id="hint4" class="hint-content">👉 Tournez le Tétra'Aide pour demander de l'aide sur le rouge et je viendrai vous aider.</div>
+                </div>
+            </div>
+
+            <div class="phase" id="phase5" style="display:none">
+                <label>Phase 5 :</label>
+                <input type="text" id="p5" maxlength="5" placeholder="Code..." onkeypress="if(event.key==='Enter') checkPhase(5)"/>
+                <button class="btn" onclick="checkPhase(5)">✓ Valider Phase 5</button>
+                <div class="hint-section">
+                    <button class="hint-btn" onclick="useHint(5)" id="hint5btn">💡 Coup de pouce Phase 5</button>
+                    <div id="hint5" class="hint-content">👉 Allez voir l'autre équipe qui a des écouteurs et parlez-leur, ne soyez pas timide !</div>
+                </div>
+            </div>
+        </div>
+        <div id="score"></div>
     </div>
 
-    <div class="field">
-        <label>Nom de l'équipe :</label>
-        <input id="team" type="text" placeholder="Entrez le nom de votre équipe..." />
-    </div>
+    <div id="audioControl" onclick="toggleAudio()">🔇</div>
 
-    <div id="timer">15:00</div>
-    <button class="btn" onclick="startTimer()" id="startBtn">🚀 Déclencher le chronomètre</button>
+    <audio id="bgMusic" loop>
+        <source src="https://dane.site.ac-lille.fr/wp-content/uploads/sites/8/2025/11/Virus-Creatif.mp3" type="audio/mpeg">
+    </audio>
 
-    <div id="phases" style="display:none">
-        
-        <div class="phase">
-            <div class="team-hints">
-                <p><strong>🎵 Le groupe Beatles</strong> détient l'indice 1.</p>
-                <p>Tentez votre chance en anglais ? :)</p>
-            </div>
-            <label>Phase 1 :</label>
-            <input type="text" id="p1" maxlength="5" placeholder="Code..."/>
-            <button class="btn" onclick="checkPhase(1)">✓ Valider Phase 1</button>
-            <div class="hint-section">
-                <button class="hint-btn" onclick="useHint(1)" id="hint1btn">💡 Coup de pouce Phase 1</button>
-                <div id="hint1" class="hint-content">👉 Allez voir une des équipes qui ont des écouteurs. Ne soyez pas trop timide :)</div>
-            </div>
-        </div>
-
-        <div class="phase" id="phase2" style="display:none">
-            <div class="team-hints rolling-stones">
-                <p><strong>🎸 Le groupe Rolling Stones</strong> détient l'indice 2.</p>
-                <p>Vous tentez de chanter Satisfaction pour les amadouer ?</p>
-            </div>
-            <label>Phase 2 :</label>
-            <input type="text" id="p2" maxlength="5" placeholder="Code..."/>
-            <button class="btn" onclick="checkPhase(2)">✓ Valider Phase 2</button>
-            <div class="hint-section">
-                <button class="hint-btn" onclick="useHint(2)" id="hint2btn">💡 Coup de pouce Phase 2</button>
-                <div id="hint2" class="hint-content">👉 Allez jeter un coup d'œil sur les murs. Il doit y avoir un indice.</div>
-            </div>
-        </div>
-
-        <div class="phase" id="phase3" style="display:none">
-            <label>Phase 3 :</label>
-            <input type="text" id="p3" maxlength="5" placeholder="Code..."/>
-            <button class="btn" onclick="checkPhase(3)">✓ Valider Phase 3</button>
-            <div class="hint-section">
-                <button class="hint-btn" onclick="useHint(3)" id="hint3btn">💡 Coup de pouce Phase 3</button>
-                <div id="hint3" class="hint-content">👉 Faites bouger les poufs, même si quelqu'un est assis dessus :)</div>
-            </div>
-        </div>
-
-        <div class="phase" id="phase4" style="display:none">
-            <label>Phase 4 :</label>
-            <input type="text" id="p4" maxlength="5" placeholder="Code..."/>
-            <button class="btn" onclick="checkPhase(4)">✓ Valider Phase 4</button>
-            <div class="hint-section">
-                <button class="hint-btn" onclick="useHint(4)" id="hint4btn">💡 Coup de pouce Phase 4</button>
-                <div id="hint4" class="hint-content">👉 Tournez le Tétra'Aide pour demander de l'aide sur le rouge et je viendrai vous aider.</div>
-            </div>
-        </div>
-
-        <div class="phase" id="phase5" style="display:none">
-            <label>Phase 5 :</label>
-            <input type="text" id="p5" maxlength="5" placeholder="Code..."/>
-            <button class="btn" onclick="checkPhase(5)">✓ Valider Phase 5</button>
-            <div class="hint-section">
-                <button class="hint-btn" onclick="useHint(5)" id="hint5btn">💡 Coup de pouce Phase 5</button>
-                <div id="hint5" class="hint-content">👉 Allez voir l'autre équipe qui a des écouteurs et parlez-leur, ne soyez pas timide !</div>
-            </div>
-        </div>
-    </div>
-    <div id="score"></div>
-</div>
-
-<div id="audioControl" onclick="toggleAudio()">🔇</div>
-
-<audio id="bgMusic" loop>
-    <source src="https://dane.site.ac-lille.fr/wp-content/uploads/sites/8/2025/11/Virus-Creatif.mp3" type="audio/mpeg">
-</audio>
-
-<script>
-    const codes = {1:"52347", 2:"23740", 3:"53480", 4:"13654", 5:"32213"};
-    let time = 15*60, interval, finished = false, startAt = 15*60;
+    <script>
+    const codes = {
+        1: "52347",
+        2: "23740",
+        3: "53480",
+        4: "13654",
+        5: "32213"
+    };
+    let time = 15 * 60,
+        interval,
+        finished = false,
+        startAt = 15 * 60;
     let hintsUsed = [];
     let isPlaying = false;
     let audio = document.getElementById('bgMusic');
-    
+
     let audioContext;
-    
+
     function createErrorSound() {
         if (!audioContext) {
             audioContext = new (window.AudioContext || window.webkitAudioContext)();
         }
-        
+
         const oscillator = audioContext.createOscillator();
         const gainNode = audioContext.createGain();
-        
+
         oscillator.connect(gainNode);
         gainNode.connect(audioContext.destination);
-        
+
         oscillator.frequency.value = 200;
         oscillator.type = 'sawtooth';
-        
+
         gainNode.gain.setValueAtTime(0.15, audioContext.currentTime);
         gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
-        
+
         oscillator.start(audioContext.currentTime);
         oscillator.stop(audioContext.currentTime + 0.3);
     }
 
     function toggleAudio() {
         const btn = document.getElementById('audioControl');
-        
+
         if (isPlaying) {
             audio.pause();
             btn.textContent = '🔇';
@@ -135,8 +387,9 @@
     }
 
     function startTimer() {
-        if (interval) return;
-        
+        if (interval)
+            return;
+
         if (!isPlaying) {
             audio.volume = 0.3;
             audio.play().then(() => {
@@ -146,15 +399,15 @@
                 console.log('Cliquez sur l\'icône pour activer la musique');
             });
         }
-        
+
         document.getElementById('startBtn').style.display = "none";
         document.getElementById('phases').style.display = "block";
         interval = setInterval(() => {
             if (time > 0 && !finished) {
                 time--;
-                document.getElementById('timer').innerText = 
-                    Math.floor(time/60).toString().padStart(2,'0') + ":" +
-                    (time%60).toString().padStart(2,'0');
+                document.getElementById('timer').innerText =
+                Math.floor(time / 60).toString().padStart(2, '0') + ":" +
+                (time % 60).toString().padStart(2, '0');
             } else if (!finished) {
                 clearInterval(interval);
                 showScore();
@@ -163,33 +416,35 @@
     }
 
     function useHint(n) {
-        if (hintsUsed.includes(n)) return;
-        
+        if (hintsUsed.includes(n))
+            return;
+
         hintsUsed.push(n);
         time = Math.max(0, time - 10);
-        document.getElementById('hint'+n).style.display = 'block';
-        document.getElementById('hint'+n+'btn').disabled = true;
+        document.getElementById('hint' + n).style.display = 'block';
+        document.getElementById('hint' + n + 'btn').disabled = true;
     }
 
     function checkPhase(n) {
         let user = document.getElementById('team').value.trim();
-        if (!user) return alert("Renseignez d'abord le nom de l'équipe !");
-        
-        let code = document.getElementById('p'+n).value.trim();
-        
+        if (!user)
+            return alert("Renseignez d'abord le nom de l'équipe !");
+
+        let code = document.getElementById('p' + n).value.trim();
+
         if (code === '') {
             createErrorSound();
             time = Math.max(0, time - 5);
             alert("⚠️ Code vide ! Vous perdez 5 secondes !");
             return;
         }
-        
+
         if (code === codes[n]) {
-            document.getElementById('p'+n).disabled = true;
-            document.getElementById('p'+n).style.background = "#4caf50";
-            document.getElementById('p'+n).style.color = "#fff";
-            if(n<5)
-                document.getElementById('phase'+(n+1)).style.display="block";
+            document.getElementById('p' + n).disabled = true;
+            document.getElementById('p' + n).style.background = "#4caf50";
+            document.getElementById('p' + n).style.color = "#fff";
+            if (n < 5)
+                document.getElementById('phase' + (n + 1)).style.display = "block";
             else {
                 finished = true;
                 showScore();
@@ -197,35 +452,40 @@
         } else {
             createErrorSound();
             time = Math.max(0, time - 5);
-            document.getElementById('p'+n).style.background = "#c62828";
-            document.getElementById('p'+n).style.color = "#fff";
-            setTimeout(()=>{
-                document.getElementById('p'+n).style.background="";
-                document.getElementById('p'+n).style.color="";
-            },800);
+            document.getElementById('p' + n).style.background = "#c62828";
+            document.getElementById('p' + n).style.color = "#fff";
+            setTimeout(() => {
+                document.getElementById('p' + n).style.background = "";
+                document.getElementById('p' + n).style.color = "";
+            }, 800);
         }
     }
 
     function showScore() {
         clearInterval(interval);
         let scorebase = 1000;
-        let bonus = Math.floor((time/startAt)*scorebase);
+        let bonus = Math.floor((time / startAt) * scorebase);
         let team = document.getElementById('team').value.trim();
         let penalite = hintsUsed.length * 10;
-        document.getElementById('score').innerHTML = 
-            "🎉 <strong>Bravo " + (team ? team : "Équipe") + " !</strong><br>" +
-            "Temps restant : " + Math.floor(time/60) + ":" + (time%60).toString().padStart(2,'0') + "<br>" +
-            "Coups de pouce utilisés : " + hintsUsed.length + " (-" + penalite + "s)<br>" +
-            "Score final : <span style='font-size:1.3em'>" + bonus + "</span> points";
+        document.getElementById('score').innerHTML =
+        "🎉 <strong>Bravo vous avez collectivement réussi à désamorcer la bombe, c'est un beau travail d'équipe.</strong><br><br>" +
+        "Vous avez collecté la lettre <strong style='font-size:1.5em; color:#4caf50'>F</strong> et vous êtes en <strong>4<sup>e</sup> position</strong>";
         document.getElementById('phases').style.display = 'none';
         saveScore(team, bonus, hintsUsed.length);
     }
 
     function saveScore(nom, score, hints) {
-        if (!nom) return;
+        if (!nom)
+            return;
         let scores = JSON.parse(localStorage.getItem('scores-escape') || '[]');
-        scores.push({team: nom, score, hints, date: new Date().toLocaleString()});
+        scores.push({
+            team: nom,
+            score,
+            hints,
+            date: new Date().toLocaleString()
+        });
         localStorage.setItem('scores-escape', JSON.stringify(scores));
     }
-</script>
-</body> </html> 
+    </script>
+</body>
+</html>
